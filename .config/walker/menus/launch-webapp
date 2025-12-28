@@ -1,0 +1,21 @@
+#!/bin/bash
+
+browser=$(xdg-settings get default-web-browser)
+
+case $browser in
+  google-chrome* | brave-browser* | microsoft-edge* | opera* | vivaldi* | helium-browser*) ;;
+  *) browser_type="chromium.desktop" ;;
+
+  firefox* | floorp*) ;;
+  *) browser_type="firefox" ;;
+
+  *) browser_type="chromium" browser="chromium.desktop" ;;
+esac
+
+browser_path=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' {~/.local,/usr}/share/applications/$browser 2>/dev/null | head -1) --app="$1" "${@:2}"
+
+if [[ "$browser_type"=="firefox" ]]; then
+  exec setsid uwsm-app -- "$browser_path" --ssb="$1" "${@:2}"
+else
+  exec setsid uwsm-app -- "$browser_path" --app="$1" "${@:2}"
+fi
