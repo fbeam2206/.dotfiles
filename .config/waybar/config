@@ -1,0 +1,42 @@
+[{
+    "name": "main-bar",
+    "reload_style_on_change": true,
+    "layer": "top", 
+    "exclusive": true,
+    "position": "top",
+    "output": ["DP-5"],
+
+    "include": ["~/.config/waybar/default-modules.json"],
+    "stylesheet": "~/.config/waybar/style.css",
+    
+
+    "margin-left": 0,
+    "margin-right": 0,
+    "margin-top": 0,
+
+
+    "modules-left": [ "custom/power", "hyprland/window" ],
+    "modules-center": [],
+    "modules-right": [ "group/audio-expander",  "network", "custom/notes", "custom/notification", "group/tray-expander", "clock" ],
+  },
+  {
+    "name": "secondary-bar",
+    "reload_style_on_change": true,
+    "layer": "bottom", 
+    "position": "top",
+    "output": ["HDMI-A-5"],
+
+    "exclusive": false,
+    "passthrough": true, 
+
+    "include":["~/.config/waybar/day-time.json"],
+
+    "height": 50,
+
+    "margin-left": 0,
+    "margin-right": 0,
+    "margin-top": 0,
+
+
+    "modules-center": [ "clock", "custom/date" ],
+}]

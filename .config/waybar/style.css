@@ -1,0 +1,334 @@
+@import url('../../.cache/wal/colors-waybar.css');
+@define-color zero #DBDBDB;
+@define-color one #E3E3E3;
+@define-color two #EBEBEB;
+@define-color three #c1c0c0;
+@define-color four #665353;
+
+window#waybar.main-bar {
+  background: transparent;
+}
+
+
+window#waybar.secondary-bar {
+  background: transparent;
+}
+
+
+window#waybar.main-bar * {
+    font-family: "SF Pro Display";
+    font-size: 18px;
+    min-height: 5px;
+    color: shade(@background, 0.3);
+    border: none;
+    border-radius: 21;
+}
+
+
+window#waybar.secondary-bar *  {
+    font-family: "Molgan";
+    font-weight: 400;
+    font-size: 148px;
+    min-height: 0;
+    color: white;
+    border: none;
+    background: transparent;
+    text-shadow: 10px 10px 6px rgba(0, 0, 0, 1.0);
+}
+
+
+window#waybar.secondary-bar .modules-center  {
+    background: transparent;
+}
+
+
+window#waybar.secondary-bar .modules-left  {
+    background: transparent;
+}
+
+
+window#waybar.secondary-bar .modules-right  {
+    background: transparent;
+}
+
+window#waybar > box {
+  /*background-color: rgba(233, 225, 212, 0.698);*/
+  margin: 12px;
+}
+
+
+window#waybar.main-bar .modules-left {
+  /*background: linear-gradient(
+     to bottom,
+     alpha(@one,   0.95) 00%,
+     alpha(@one,   0.95) 45%,
+     alpha(@two,   0.95) 55%,
+     alpha(@two, 0.95) 100%
+   );*/
+  background: linear-gradient(
+     to bottom,
+     shade(alpha(@one,   1.00), 1.00) 00%,
+     shade(alpha(@one,   1.00), 1.00) 45%,
+     shade(alpha(@one,   1.00), 1.00) 55%,
+     shade(alpha(@one,   1.00), 1.00) 100%
+  );
+
+  box-shadow: 0px 3px 3px rgba(26, 26, 26, 0.56), 
+              0px 2px 5px rgba(26, 26, 26, 0.29),
+              0px 0px 8px rgba(26, 26, 26, 0.25) inset;
+
+  padding-top:    0px;
+  padding-bottom: 0px;
+  padding-right:  0px;
+  padding-left:   8px;
+
+  margin-top:     0px;
+  margin-bottom:  0px;
+  margin-right:   0px;
+  margin-left:    0px;
+}
+
+
+window#waybar.main-bar .modules-right {
+  /*background: linear-gradient(
+      to bottom,
+      alpha(@one,   0.95) 00%,
+      alpha(@two,   0.90) 45%,
+      alpha(@two,   0.85) 55%,
+      alpha(@three, 0.80) 100%
+    );*/
+
+  background: linear-gradient(
+     to bottom,
+     shade(alpha(@one,   1.00), 1.00) 00%,
+     shade(alpha(@one,   1.00), 1.00) 45%,
+     shade(alpha(@one,   1.00), 1.00) 55%,
+     shade(alpha(@one,   1.00), 1.00) 100%
+  );
+
+  box-shadow: 0px 3px 3px rgba(26, 26, 26, 0.56), 
+              0px 2px 5px rgba(26, 26, 26, 0.29),
+              0px 0px 8px rgba(26, 26, 26, 0.25) inset;
+
+  padding-bottom: 0px;
+  padding-right:  8px;
+  padding-left:   9px;
+  padding-top:    0px;
+
+  margin-bottom: 0px;
+  margin-right:  0px;
+  margin-left:   0px;
+  margin-top:    0px;
+}
+
+window#waybar.empty {
+  min-width: 0px;
+  min-height: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding: 0 0px;
+}
+
+#window {
+  color: rgb(0,0,0);
+  background: transparent;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "SF Pro Text";
+
+  padding-top:    0px;
+  padding-bottom: 0px;
+  padding-right:  0px;
+  padding-left:   0px;
+
+  margin-top:     0px;
+  margin-bottom:  0px;
+  margin-right:   8px;
+  margin-left:    6px;
+}
+
+
+#custom-power {
+  background: transparent;
+  font-weight: 500;
+
+  padding-bottom: 0px;
+  padding-right:  10px;
+  padding-left:   2px;
+  padding-top:    0px;
+
+  margin-bottom:  0px;
+  margin-right:   0px;
+  margin-left:    0px;
+  margin-top:     0px;
+}
+
+
+#custom-expand-icon {
+  background: transparent;
+
+
+  padding-bottom: 0px;
+  padding-right:  0px;
+  padding-left:   0px;
+  padding-top:    0px;
+  
+  margin-bottom: 0px;
+  margin-right:  4px;
+  margin-left:   0px;
+  margin-top:    1px;
+}
+
+
+#tray-expander {
+
+  padding-bottom: 0px;
+  padding-right:  2px;
+  padding-left:   0px;
+  padding-top:    0px;
+
+  margin-bottom: 0px;
+  margin-right:  4px;
+  margin-left:   4px;
+  margin-top:    0px;
+}
+
+
+#tray {
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.45) inset,
+              0px 0px 2px rgba(0, 0, 0, 0.55) inset;
+  border: 0px solid rgba(0, 0, 0, 0.0);
+  border-radius: 16;
+  background: shade(alpha(@one, 1.0), 0.9);
+
+  padding-top:    0px;
+  padding-left:  10px;
+  padding-right: 10px;
+  padding-bottom: 0px;
+
+  margin-bottom:  0px;
+  margin-right:   4px;
+  margin-left:    8px;
+  margin-top:     0px;
+}
+
+
+#custom-notes {
+  margin-bottom:  0px;
+  margin-right:   4px;
+  margin-left:    4px;
+  margin-top:     1px;
+
+  padding-bottom: 0px;
+  padding-right:  4px;
+  padding-left:   4px;
+  padding-top:    0px;
+
+  background: transparent;
+}
+
+
+#workspaces button {
+    padding: 0 0px;
+    margin:  0 3px;
+    background: transparent;
+    color: white;
+}
+
+
+#workspaces button.focused {
+    color: #c9545d;
+}
+
+#pulseaudio{
+    padding-right: 4px;
+    padding-left:  4px;
+
+    margin-right: 0px;
+    margin-left:  0px;
+    margin-top:   0px;
+    border: 1px solid red;
+}
+
+#network{
+  padding-bottom: 0px;
+  padding-right:  5px;
+  padding-left:   4px;
+  padding-top:    0px;
+
+  margin-bottom:  0px;
+  margin-right:   4px;
+  margin-left:    4px;
+  margin-top:     1px;
+
+  background: transparent;
+}
+
+#clock {
+  padding-right: 4px;
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-left: 2px;
+  font-family: "SF Pro Display";
+  font-weight: 600;
+  background: transparent;
+  border-radius: 15px;
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+tooltip {
+    background: alpha(@foreground, 0.8);
+    color: @black;  /* This changes the font color */
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#pulseaudio-slider {
+  padding: 0;
+  margin: 4;
+}
+
+#pulseaudio-slider slider {
+  min-height: 0px;
+  min-width: 0px;
+  opacity: 0;
+  border: none;
+  background-image: none;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.44);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+#pulseaudio-slider > contents > trough {
+  min-height: 10px;
+  min-width: 80px;
+  border-radius: 5px;
+  background: blue;
+  background: shade(@three, 0.8);
+}
+
+#pulseaudio-slider > contents > trough > highlight {
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 5px;
+  background-color: shade(@background, 0.4);
+}
+
+menu {
+  background-color: alpha(shade(@one, 0.95), 0.9);
+  font-weight: 500;
+}
+
+#custom-notification {
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 12px;
+  margin-top: 0px;
+  margin-left: 8px;
+  margin-right: 0px;
+  font-family: "NotoSansMono Nerd Font"
+}

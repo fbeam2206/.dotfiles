@@ -1,0 +1,122 @@
+{
+
+    "custom/power": {
+        "format": "",/* ⌥   */
+        "on-click": "~/.config/walker/menus/menu.sh",
+        "tooltip": false
+    },
+
+    "hyprland/window": {
+      "format": "{initialTitle}",
+      "separate-outputs": true,
+      "offscreen-css": true,
+      "offscreen-css-text": "Hyprland",
+    },
+
+    "hyprland/workspaces": {
+        "icon-size": 6,
+        "format": "{icon}",
+        "format-icons": {
+            "2": "",
+            "3": "",
+        }
+    },
+
+    "custom/notes": {
+        "format":"",
+        "on-click": "hyprctl dispatch pin class:trilium && hyprctl dispatch movetoworkspacesilent special:scratch,class:trilium",
+        "on-click-right": "hyprctl dispatch togglespecialworkspace scratch",
+        "on-click-right-release": "hyprctl dispatch togglespecialworkspace scratch",
+        "tooltip-format": "Notes"
+    },
+
+    "group/tray-expander": {
+      "orientation": "inherit",
+      "drawer": {
+        "transition-duration": 600,
+        "children-class": "tray-group-item"
+      },
+      "modules": ["custom/expand-icon", "tray"]
+    },
+
+    "custom/expand-icon": {
+      "format": "",
+      "tooltip": false
+    },
+
+    "tray": {
+      "icon-size": 18,
+      "spacing": 8
+    },
+
+    "clock": {
+        "format": "{:%I:%M %p}",
+        "tooltip-format": "<span font='monospace'>{calendar}</span>",
+        "calendar": {
+            "format": {
+              "today": "<span color='#B80000'><b><u>{}</u></b></span>"
+            }
+          }
+    },
+
+    "network": {
+        // "interface": "wlp2s0", // (Optional) To force the use of this interface
+        "format-wifi": "({signalStrength}%) ",
+        "format-ethernet": "",
+        "format-di:sconnected": "Disconnected ⚠",
+        "on-click": "nm-applet",
+        "tooltip-format": "Network"
+    },
+
+    "group/audio-expander": {
+      "orientation": "horizontal",
+      "drawer": {
+        "transition-duration": 600,
+      },
+      "modules": [ "pulseaudio", "pulseaudio/slider"]
+    },
+
+    "pulseaudio": {
+        //"scroll-step": 1,
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "default": ["󰓃", "󰓃"]
+        },
+        "on-click": "pavucontrol",
+        "tooltip-format": "Audio"
+    },
+
+    "pulseaudio/slider": {
+      "min": 0,
+      "max": 100,
+      "orientation": "horizontal"
+    },
+
+    "custom/notification": {
+      "tooltip": false,
+      "format": "{icon}",
+      "format-icons": {
+           "notification": "",
+           "none": "",
+           "dnd-notification": "<U+F1F7><span foreground='red'><sup><U+F444></sup></span>",
+           "dnd-none": "<U+F1F7>",
+           "inhibited-notification": "<U+F0A2><span foreground='red'><sup><U+F444></sup></span>",
+           "inhibited-none": "<U+F0A2>",
+           "dnd-inhibited-notification": "<U+F1F7><span foreground='red'><sup><U+F444></sup></span>",
+           "dnd-inhibited-none": "<U+F1F7>"
+      },
+      "return-type": "json",
+      "exec-if": "which swaync-client",
+      "exec": "swaync-client -swb",
+      "on-click": "swaync-client -t -sw",
+      "on-click-right": "swaync-client -d -sw",
+      "escape": true
+    },
+}
