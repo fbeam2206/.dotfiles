@@ -41,7 +41,7 @@ Terminal(){
 }
 
 PresentTerminal(){
-  launch-floating-terminal.sh $1
+  launch-floating-terminal "$1"
 }
 
 Install(){
@@ -55,10 +55,10 @@ AurInstall(){
 ShowLearnMenu(){
   case $(Menu "Learn" "  Keybindings\n  Hyprland\n󰣇  Arch\n  Neovim\n󱆃  Bash") in
   *Keybindings*) show-keybindings ;;
-  *Hyprland*) launch-webapp "https://wiki.hypr.land/" ;;
-  *Arch*) launch-webapp "https://wiki.archlinux.org/title/Main_page" ;;
-  *Bash*) launch-webapp "https://devhints.io/bash" ;;
-  *Neovim*) launch-webapp "https://www.lazyvim.org/keymaps" ;;
+  *Hyprland*) launch-webapp "Hyprland Wiki" "https://wiki.hypr.land/" ;;
+  *Arch*) launch-webapp "Arch Wiki" "https://wiki.archlinux.org/title/Main_page" ;;
+  *Bash*) launch-webapp "Bash Wiki" "https://devhints.io/bash" ;;
+  *Neovim*) launch-webapp "Neovim Keymaps" "https://www.lazyvim.org/keymaps" ;;
   *) ShowMainMenu ;;
   esac
 }
@@ -102,8 +102,8 @@ ShowToggleMenu(){
 ShowRemoveMenu(){
     case $(Menu "Remove" "󰣇  Package\n  Web App\n  TUI\n󰸌  Theme") in
   *Package*) Terminal pkg-remove ;;
-  *Web*) PresentTerminal webapp-remove ;;
-  *TUI*) PresentTerminal tui-remove ;;
+  *Web*) PresentTerminal "webapp-remove" ;;
+  *TUI*) PresentTerminal "tui-remove" ;;
   *Theme*) PresentTerminal theme-remove ;;
   *) ShowMainMenu ;;
   esac
@@ -112,9 +112,9 @@ ShowRemoveMenu(){
 ShowSystemMenu(){
   case $(Menu "System" "  Lock\n󱄄  Screensaver\n󰤄  Suspend\n󰜉  Restart\n󰐥  Shutdown") in
   *Lock*) lock-screen ;;
-  *Suspend*) systemctl suspend ;;
-  *Restart*) uwsm stop && systemctl reboot --no-wall ;; # Try uwsm stop -poweroff
-  *Shutdown*) uwsm stop -poweroff ;;
+  *Logout*) uwsm stop ;;
+  *Restart*) systemctl reboot --no-wall ;; # Try uwsm stop -poweroff
+  *Shutdown*) systemctl poweroff ;;
   *) back_to ShowMainMenu ;;
   esac
 }
@@ -157,7 +157,7 @@ GoToMenu(){
   case "${1,,}" in
   *apps*) walker -p "Launch…" ;;
   *learn*) ShowLearnMenu ;;
-  *power*) GTK_THEME=WhiteSur-Dark-grey syspower ;;
+  *power*)  ShowSystemMenu ;;
   *remove*) ShowRemoveMenu ;;
   *trigger*) ShowTriggerMenu ;;
   *install*) ShowInstallMenu ;;

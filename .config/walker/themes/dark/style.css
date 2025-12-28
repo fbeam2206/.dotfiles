@@ -117,6 +117,9 @@ child:selected .item-box {
   font-size: 12px;
   opacity: 0.5;
 }
+.item-text {
+  font-size: 17px;
+}
 
 .item-image-text {
   font-size: 28px;
