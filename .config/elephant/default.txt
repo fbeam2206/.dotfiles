@@ -1,0 +1,59 @@
+# Elephant
+A service providing various datasources which can be triggered to perform actions.
+
+Run `elephant -h` to get an overview of the available commandline flags and actions.
+## Elephant Configuration
+`~/.config/elephant/elephant.toml`
+#### ElephantConfig
+| Field | Type | Default | Description |
+| --- | ---- | ---- | --- |
+|auto_detect_launch_prefix|bool|true|automatically detects uwsm, app2unit or systemd-run|
+|overload_local_env|bool|false|overloads the local env|
+
+## Provider Configuration
+### Elephant Desktop Applications
+
+Run installed desktop applications.
+
+#### Features
+
+- history
+- pin items
+- alias items
+- auto-detect `uwsm`/`app2unit`
+
+
+`~/.config/elephant/desktopapplications.toml`
+#### Config
+| Field | Type | Default | Description |
+| --- | ---- | ---- | --- |
+|icon|string|depends on provider|icon for provider|
+|min_score|int32|depends on provider|minimum score for items to be displayed|
+|hide_from_providerlist|bool|false|hides a provider from the providerlist provider. provider provider.|
+|launch_prefix|string||overrides the default app2unit or uwsm prefix, if set.|
+|locale|string||to override systems locale|
+|action_min_score|int|20|min score for actions to be shown|
+|show_actions|bool|false|include application actions, f.e. 'New Private Window' for Firefox|
+|show_generic|bool|true|include generic info when show_actions is true|
+|show_actions_without_query|bool|false|show application actions, if the search query is empty|
+|history|bool|true|make use of history for sorting|
+|history_when_empty|bool|false|consider history when query is empty|
+|only_search_title|bool|false|ignore keywords, comments etc from desktop file when searching|
+|icon_placeholder|string|applications-other|placeholder icon for apps without icon|
+|aliases|map[string]string||setup aliases for applications. Matched aliases will always be placed on top of the list. Example: 'ffp' => '<identifier>'. Check elephant log output when activating an item to get its identifier.|
+|blacklist|[]string|<empty>|blacklist desktop files from being parsed. Regexp.|
+
+### Elephant Providerlist
+
+Lists all installed providers and configured menus.
+
+
+`~/.config/elephant/providerlist.toml`
+#### Config
+| Field | Type | Default | Description |
+| --- | ---- | ---- | --- |
+|icon|string|depends on provider|icon for provider|
+|min_score|int32|depends on provider|minimum score for items to be displayed|
+|hide_from_providerlist|bool|false|hides a provider from the providerlist provider. provider provider.|
+|hidden|[]string|<empty>|hidden providers|
+

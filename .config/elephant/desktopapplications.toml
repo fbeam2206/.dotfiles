@@ -1,0 +1,1 @@
+blacklist = [ "^octopi.*", "^electron.*", ".*jdk.*", ".*xgps.*", ".*pcman.*", ".*qt.*", ".*v4l2.*", ".*proton.*", ".*lstopo.*", ".*goverlay.*", ".*vidcap.*", ".*tester", ".*analyzer", ".*update", "^avahi.*", ".*stereo.*", ".*mono.*"]
