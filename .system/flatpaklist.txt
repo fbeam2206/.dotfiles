@@ -1,0 +1,10 @@
+com.adamcake.Bolt
+com.discordapp.Discord
+com.github.tchx84.Flatseal
+dev.vencord.Vesktop
+io.freetubeapp.FreeTube
+net.rpcs3.RPCS3
+one.ablaze.floorp
+org.flathub.flatpak-external-data-checker
+org.kde.kdenlive
+org.keepassxc.KeePassXC

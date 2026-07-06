@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Regenerate the package lists tracked in ~/.system (dotfiles repo).
+# Triggered by /etc/pacman.d/hooks/pkglists.hook after every pacman
+# transaction; safe to run manually as root or as the user.
+#
+# Flatpak note: flatpak installs don't trigger pacman hooks, so
+# flatpaklist.txt only refreshes on the next pacman transaction (or a
+# manual run). All flatpaks here are system-installation, so listing
+# works as root.
+set -euo pipefail
+
+DEST=/home/graham/.system
+OWNER=graham:graham
+
+write() {
+    local f="$DEST/$1"
+    cat > "$f.tmp"
+    [ "$(id -u)" -eq 0 ] && chown "$OWNER" "$f.tmp"
+    mv "$f.tmp" "$f"
+}
+
+pacman -Qqen | write pkglist.txt
+pacman -Qqem | write aurlist.txt
+if command -v flatpak >/dev/null 2>&1; then
+    flatpak list --app --columns=application | sort | write flatpaklist.txt
+fi

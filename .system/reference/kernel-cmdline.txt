@@ -1,0 +1,1 @@
+BOOT_IMAGE=/@/boot/vmlinuz-linux-cachyos root=UUID=6eaf7d1e-ed6b-4802-b4ec-36de117dcc00 rw rootflags=subvol=@ mitigations=off nowatchdog nvme_load=YES zswap.enabled=0 cryptdevice=UUID=77f8fd0a-cc87-4ff9-b1e8-f0f0862a777b:luks-77f8fd0a-cc87-4ff9-b1e8-f0f0862a777b root=/dev/mapper/luks-77f8fd0a-cc87-4ff9-b1e8-f0f0862a777b splash loglevel=3
