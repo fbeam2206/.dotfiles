@@ -101,10 +101,10 @@ ShowToggleMenu(){
 
 ShowRemoveMenu(){
     case $(Menu "Remove" "󰣇  Package\n  Web App\n  TUI\n󰸌  Theme") in
-  *Package*) Terminal pkg-remove ;;
+  *Package*) PresentTerminal "pkg-remove" ;;
   *Web*) PresentTerminal "webapp-remove" ;;
   *TUI*) PresentTerminal "tui-remove" ;;
-  *Theme*) PresentTerminal theme-remove ;;
+  *Theme*) PresentTerminal "theme-remove" ;;
   *) ShowMainMenu ;;
   esac
 }
@@ -125,8 +125,8 @@ ShowMainMenu() {
 
 ShowInstallMenu(){
   case $(Menu "Install" "󰣇  Package\n󰣇  AUR\n  Web App\n  TUI\n") in
-  *Package*) Terminal pkg-install ;;
-  *AUR*) Terminal pkg-aur-install ;;
+  *Package*) PresentTerminal pkg-install ;;
+  *AUR*) PresentTerminal pkg-aur-install ;;
   *Web*) PresentTerminal webapp-install ;;
   *TUI*) PresentTerminal tui-install ;;
   *) ShowMainMenu ;;
@@ -158,6 +158,7 @@ GoToMenu(){
   *apps*) walker -p "Launch…" ;;
   *learn*) ShowLearnMenu ;;
   *power*)  ShowSystemMenu ;;
+  *style*) PresentTerminal "$HOME/.config/hypr/scripts/changewallpaper.sh" ;;
   *remove*) ShowRemoveMenu ;;
   *trigger*) ShowTriggerMenu ;;
   *install*) ShowInstallMenu ;;

@@ -2,12 +2,14 @@
 
     "custom/power": {
         "format": "",/* ⌥   */
-        "on-click": "~/.config/walker/menus/menu.sh",
+        "on-click-release": "~/.config/walker/menus/menu.sh",
         "tooltip": false
     },
 
     "hyprland/window": {
       "format": "{initialTitle}",
+      "offscreen-css": true,
+      "offscreen-css-text": "Hyprland",
       "separate-outputs": true,
       "offscreen-css": true,
       "offscreen-css-text": "Hyprland",
@@ -24,8 +26,8 @@
 
     "custom/notes": {
         "format":"",
-        "on-click": "hyprctl dispatch pin class:trilium && hyprctl dispatch movetoworkspacesilent special:scratch,class:trilium",
-        "on-click-right": "hyprctl dispatch togglespecialworkspace scratch",
+        "on-click-release": "hyprctl dispatch pin class:trilium && hyprctl dispatch movetoworkspacesilent special:scratch,class:trilium",
+        "on-click-right-release": "hyprctl dispatch togglespecialworkspace scratch",
         "on-click-right-release": "hyprctl dispatch togglespecialworkspace scratch",
         "tooltip-format": "Notes"
     },
@@ -64,7 +66,7 @@
         "format-wifi": "({signalStrength}%) ",
         "format-ethernet": "",
         "format-di:sconnected": "Disconnected ⚠",
-        "on-click": "nm-applet",
+        "on-click-release": "nm-applet",
         "tooltip-format": "Network"
     },
 
@@ -72,8 +74,10 @@
       "orientation": "horizontal",
       "drawer": {
         "transition-duration": 600,
+        "click-to-reveal": true,
       },
-      "modules": [ "pulseaudio", "pulseaudio/slider"]
+      "modules": [ "pulseaudio", "pulseaudio/slider"],
+      "tooltip-format": "Volume",
     },
 
     "pulseaudio": {
@@ -89,7 +93,7 @@
             "portable": "",
             "default": ["󰓃", "󰓃"]
         },
-        "on-click": "pavucontrol",
+        "on-click-middle-release": "pavucontrol",
         "tooltip-format": "Audio"
     },
 
@@ -100,23 +104,23 @@
     },
 
     "custom/notification": {
-      "tooltip": false,
+      "tooltip-format": "Notifications",
       "format": "{icon}",
       "format-icons": {
            "notification": "",
            "none": "",
-           "dnd-notification": "<U+F1F7><span foreground='red'><sup><U+F444></sup></span>",
-           "dnd-none": "<U+F1F7>",
-           "inhibited-notification": "<U+F0A2><span foreground='red'><sup><U+F444></sup></span>",
-           "inhibited-none": "<U+F0A2>",
-           "dnd-inhibited-notification": "<U+F1F7><span foreground='red'><sup><U+F444></sup></span>",
-           "dnd-inhibited-none": "<U+F1F7>"
+           "dnd-notification": "",
+           "dnd-none": "",
+           "inhibited-notification": "",
+           "inhibited-none": "",
+           "dnd-inhibited-notification": "",
+           "dnd-inhibited-none": ""
       },
       "return-type": "json",
       "exec-if": "which swaync-client",
       "exec": "swaync-client -swb",
-      "on-click": "swaync-client -t -sw",
-      "on-click-right": "swaync-client -d -sw",
+      "on-click-release": "swaync-client -t -sw",
+      "on-click-right-release": "swaync-client -d -sw",
       "escape": true
     },
 }
