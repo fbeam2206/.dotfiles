@@ -1,0 +1,89 @@
+{
+  "bar.customModules.storage.paths": [
+    "/"
+  ],
+  "menus.transition": "crossfade",
+  "theme.bar.outer_spacing": "1.6em",
+  "theme.bar.buttons.windowtitle.enableBorder": false,
+  "menus.clock.time.hideSeconds": false,
+  "menus.clock.weather.location": "Los Angeles",
+  "menus.clock.weather.unit": "imperial",
+  "theme.bar.menus.enableShadow": false,
+  "bar.bluetooth.label": true,
+  "bar.battery.label": true,
+  "bar.clock.format": "%a %b %d  %I:%M:%S %p",
+  "theme.bar.floating": false,
+  "bar.autoHide": "never",
+  "bar.layouts": {
+    "0": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "network",
+        "bluetooth",
+        "battery",
+        "systray",
+        "clock",
+        "notifications"
+      ]
+    },
+    "1": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "clock",
+        "notifications"
+      ]
+    },
+    "2": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "clock",
+        "notifications"
+      ]
+    }
+  },
+  "bar.network.label": true,
+  "theme.bar.menus.monochrome": false,
+  "wallpaper.pywal": false,
+  "wallpaper.image": "",
+  "theme.bar.menus.background": "#2d2c2c",
+  "theme.bar.menus.buttons.default": "#b4befe",
+  "theme.bar.menus.buttons.active": "#f5c2e6",
+  "theme.bar.menus.cards": "#1e1e2e",
+  "theme.bar.transparent": false,
+  "theme.bar.buttons.style": "default",
+  "theme.bar.opacity": 90,
+  "theme.bar.buttons.opacity": 100,
+  "theme.bar.buttons.background_opacity": 100,
+  "theme.bar.buttons.background": "#c0bfbc",
+  "theme.bar.background": "#2b2a2c",
+  "theme.bar.buttons.icon": "#b4befe",
+  "theme.bar.buttons.workspaces.active": "#f5c2e7",
+  "theme.bar.buttons.workspaces.occupied": "#f2cdcd",
+  "theme.bar.menus.menu.systray.dropdownmenu.background": "#11111b",
+  "theme.bar.menus.menu.systray.dropdownmenu.text": "#cdd6f4",
+  "wallpaper.enable": false
+}

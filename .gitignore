@@ -1,0 +1,11 @@
+# Python venv living inside hypr scripts (23 MB, regenerable —
+# rebuild instructions in ~/.system/BOOTSTRAP.md §6)
+.config/hypr/scripts/bin/
+.config/hypr/scripts/include/
+.config/hypr/scripts/lib/
+.config/hypr/scripts/lib64
+.config/hypr/scripts/pyvenv.cfg
+
+# generated caches inside otherwise-tracked dirs
+.config/micro/buffers/
+.config/fish/fish_history

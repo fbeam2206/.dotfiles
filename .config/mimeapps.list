@@ -1,0 +1,20 @@
+[Default Applications]
+text/plain=org.gnome.TextEditor.desktop
+x-scheme-handler/discord=vesktop.desktop
+text/css=org.gnome.TextEditor.desktop
+image/webp=org.gnome.eog.desktop
+image/png=org.gnome.eog.desktop
+image/jpeg=org.gnome.eog.desktop
+x-scheme-handler/discord-424004941485572097=discord-424004941485572097.desktop
+x-scheme-handler/discord-1192493799805563062=discord-1192493799805563062.desktop
+inode/directory=org.gnome.Nautilus.desktop
+x-scheme-handler/nxm=umo.desktop
+x-scheme-handler/momw=umo.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+
+[Added Associations]
+text/plain=org.gnome.TextEditor.desktop;
+text/css=org.gnome.TextEditor.desktop;
+image/webp=org.gnome.eog.desktop;
+image/png=org.gnome.eog.desktop;
+image/jpeg=org.gnome.eog.desktop;

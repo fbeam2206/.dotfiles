@@ -1,0 +1,14 @@
+[Unit]
+Description=CS2 CPU shield — reserve P-cores 2-11 exclusively for Counter-Strike 2
+Documentation=man:cpuset(7)
+# On-demand only: started/stopped via `cs2-shield on|off`, never enabled at boot.
+
+[Service]
+Type=simple
+ExecStartPre=/usr/local/bin/cs2-shield apply
+ExecStart=/usr/local/bin/cs2-shield watch
+ExecStopPost=/usr/local/bin/cs2-shield revert
+Restart=no
+TimeoutStopSec=10
+# The watcher must keep running even after system.slice is confined.
+Slice=system.slice

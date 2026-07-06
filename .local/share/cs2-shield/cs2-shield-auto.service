@@ -1,0 +1,17 @@
+[Unit]
+Description=CS2 CPU shield auto-arm — arm/disarm the shield as Counter-Strike 2 starts/stops
+Documentation=man:cpuset(7)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/cs2-shield supervise
+# When auto-arm is turned off, make sure no shield is left applied.
+ExecStopPost=/usr/local/bin/cs2-shield off
+Restart=on-failure
+RestartSec=5
+# Keep the supervisor on the housekeeping cores too.
+Slice=system.slice
+
+[Install]
+WantedBy=multi-user.target

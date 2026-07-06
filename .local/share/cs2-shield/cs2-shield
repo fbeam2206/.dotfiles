@@ -1,0 +1,229 @@
+#!/usr/bin/env bash
+# cs2-shield — give Counter-Strike 2 exclusive use of P-cores 1..5.
+#
+# Hardware: Intel i5-13600K
+#   P-cores : CPUs 0-11  (6 physical cores, 2 threads each)
+#             P0=0,1   P1=2,3   P2=4,5   P3=6,7   P4=8,9   P5=10,11
+#   E-cores : CPUs 12-19 (8 cores)
+#
+# When the shield is ON:
+#   * everything else (system.slice, user.slice, init.scope) is confined to the
+#     HOUSEKEEPING set  = P-core 0 + all E-cores  (CPUs 0-1,12-19)
+#   * a dedicated cgroup `cs2` owns the GAME set  = P-cores 1..5 (CPUs 2-11)
+#   * a watcher moves the `cs2` game process into that cgroup as soon as it
+#     appears, so CS2 runs alone on those five P-cores.
+#   * every steerable hardware IRQ (USB/mouse, GPU, NIC, ...) is moved to the
+#     housekeeping set so interrupts stop preempting the game cores
+#   * the dGPU performance level is pinned to `high` so low-load moments
+#     (menus, walking) can't downclock it and cause reclock frametime spikes
+#
+# When the shield is OFF, all 20 threads are handed back to the whole system.
+#
+# All changes are runtime-only (`--runtime`) and self-cleared on reboot, so a
+# bad state can never survive a restart.
+
+set -uo pipefail
+
+# ----- configuration (derived from the i5-13600K topology above) -------------
+GAME_CPUS="2-11"          # P1..P5            -> CS2, exclusively
+HOUSE_CPUS="0-1,12-19"    # P0 + all E-cores  -> everything else
+MEMS="0"                  # single NUMA node
+ALL_CPUS="0-$(( $(nproc --all) - 1 ))"
+CONFINED_UNITS=(system.slice user.slice init.scope)
+
+CG_ROOT="/sys/fs/cgroup"
+GAME_CG="$CG_ROOT/cs2"
+WQ_MASK_FILE="/sys/devices/virtual/workqueue/cpumask"
+STATE_DIR="/run/cs2-shield"
+WQ_SAVE="$STATE_DIR/workqueue.cpumask"
+IRQ_SAVE="$STATE_DIR/irq.affinity"
+GPU_SAVE="$STATE_DIR/gpu.dpm"
+POLL_SECONDS="0.5"        # how often the active shield re-checks for cs2
+AUTO_POLL_SECONDS="1"     # how often auto-arm polls for cs2 launching/exiting
+# -----------------------------------------------------------------------------
+
+log()  { printf '[cs2-shield] %s\n' "$*"; }
+die()  { printf '[cs2-shield] ERROR: %s\n' "$*" >&2; exit 1; }
+need_root() { [[ ${EUID:-$(id -u)} -eq 0 ]] || die "must run as root (use: sudo cs2-shield $1)"; }
+
+# Convert a cpu list ("0-1,12-19") to a hex bitmask for the workqueue cpumask.
+cpulist_to_mask() {
+    local list="$1" mask=0 part lo hi i; local -a parts
+    IFS=',' read -ra parts <<< "$list"
+    for part in "${parts[@]}"; do
+        if [[ "$part" == *-* ]]; then lo=${part%-*}; hi=${part#*-}; else lo=$part; hi=$part; fi
+        for ((i=lo; i<=hi; i++)); do mask=$(( mask | (1 << i) )); done
+    done
+    printf '%x' "$mask"
+}
+
+apply() {
+    need_root apply
+    mkdir -p "$STATE_DIR"
+
+    # 1) dedicated cgroup that owns the P-cores reserved for CS2
+    mkdir -p "$GAME_CG"
+    echo "$MEMS"      > "$GAME_CG/cpuset.mems"
+    echo "$GAME_CPUS" > "$GAME_CG/cpuset.cpus"
+    local got; got=$(cat "$GAME_CG/cpuset.cpus.effective" 2>/dev/null)
+    [[ "$got" == "$GAME_CPUS" ]] || die "game cgroup did not take cpus ($got != $GAME_CPUS)"
+
+    # 2) confine the rest of the system to the housekeeping cores
+    local u
+    for u in "${CONFINED_UNITS[@]}"; do
+        systemctl set-property --runtime "$u" "AllowedCPUs=$HOUSE_CPUS" \
+            || die "failed to confine $u"
+    done
+
+    # 3) best-effort: keep unbound kworkers off the game cores
+    if [[ -w "$WQ_MASK_FILE" ]]; then
+        cat "$WQ_MASK_FILE" > "$WQ_SAVE" 2>/dev/null || true
+        echo "$(cpulist_to_mask "$HOUSE_CPUS")" > "$WQ_MASK_FILE" 2>/dev/null \
+            || log "note: kernel rejected workqueue mask change (harmless, continuing)"
+    fi
+
+    # 4) steer hardware IRQs off the game cores (kernel-managed ones refuse the
+    #    write and are skipped; originals saved for restore)
+    local irqdir irq cur moved=0
+    : > "$IRQ_SAVE"
+    for irqdir in /proc/irq/[0-9]*; do
+        irq=${irqdir##*/}
+        cur=$(cat "$irqdir/smp_affinity_list" 2>/dev/null) || continue
+        if echo "$HOUSE_CPUS" > "$irqdir/smp_affinity_list" 2>/dev/null; then
+            printf '%s %s\n' "$irq" "$cur" >> "$IRQ_SAVE"
+            (( moved++ ))
+        fi
+    done
+    log "steered $moved IRQs to $HOUSE_CPUS"
+
+    # 5) pin the dGPU at high clocks (only amdgpu exposes this file; original
+    #    level saved for restore)
+    local f lvl
+    : > "$GPU_SAVE"
+    for f in /sys/class/drm/card*/device/power_dpm_force_performance_level; do
+        [[ -w "$f" ]] || continue
+        lvl=$(cat "$f" 2>/dev/null) || continue
+        printf '%s %s\n' "$f" "$lvl" >> "$GPU_SAVE"
+        echo high > "$f" 2>/dev/null && log "GPU perf level: $lvl -> high" \
+            || log "note: could not pin GPU perf level (harmless, continuing)"
+    done
+
+    log "ON  ->  CS2 cores = $GAME_CPUS (P1-P5) | rest of system = $HOUSE_CPUS (P0 + E-cores)"
+}
+
+move_cs2() {
+    local pid
+    for pid in $(pgrep -x cs2 2>/dev/null); do
+        if ! grep -qxF "$pid" "$GAME_CG/cgroup.procs" 2>/dev/null; then
+            if echo "$pid" > "$GAME_CG/cgroup.procs" 2>/dev/null; then
+                log "captured cs2 pid $pid -> cores $GAME_CPUS"
+            fi
+        fi
+    done
+}
+
+watch() {
+    need_root watch
+    [[ -d "$GAME_CG" ]] || die "shield not applied; run 'cs2-shield on'"
+    log "watching for cs2 (stop with: sudo cs2-shield off)"
+    while :; do
+        move_cs2
+        sleep "$POLL_SECONDS"
+    done
+}
+
+# Auto-arm: start the shield while cs2 is running, stop it when cs2 exits.
+supervise() {
+    need_root supervise
+    log "auto-arm active: shield follows the cs2 process"
+    while :; do
+        if pgrep -x cs2 >/dev/null 2>&1; then
+            systemctl is-active --quiet cs2-shield.service || systemctl start cs2-shield.service
+        else
+            systemctl is-active --quiet cs2-shield.service && systemctl stop cs2-shield.service
+        fi
+        sleep "$AUTO_POLL_SECONDS"
+    done
+}
+
+revert() {
+    need_root off
+    # 1) hand all CPUs back to the system (explicit full set = always safe)
+    local u
+    for u in "${CONFINED_UNITS[@]}"; do
+        systemctl set-property --runtime "$u" "AllowedCPUs=$ALL_CPUS" 2>/dev/null || true
+    done
+    # 2) restore the workqueue mask
+    if [[ -f "$WQ_SAVE" && -w "$WQ_MASK_FILE" ]]; then
+        cat "$WQ_SAVE" > "$WQ_MASK_FILE" 2>/dev/null || true
+    fi
+    # 2b) restore IRQ affinities and the GPU performance level
+    if [[ -f "$IRQ_SAVE" ]]; then
+        while read -r irq cur; do
+            echo "$cur" > "/proc/irq/$irq/smp_affinity_list" 2>/dev/null || true
+        done < "$IRQ_SAVE"
+    fi
+    if [[ -f "$GPU_SAVE" ]]; then
+        while read -r f lvl; do
+            echo "$lvl" > "$f" 2>/dev/null || true
+        done < "$GPU_SAVE"
+    fi
+    # 3) drain and remove the game cgroup
+    if [[ -d "$GAME_CG" ]]; then
+        if [[ -s "$GAME_CG/cgroup.procs" ]]; then
+            while read -r pid; do
+                echo "$pid" > "$CG_ROOT/cgroup.procs" 2>/dev/null || true
+            done < "$GAME_CG/cgroup.procs"
+        fi
+        rmdir "$GAME_CG" 2>/dev/null || true
+    fi
+    rm -rf "$STATE_DIR"
+    log "OFF ->  all CPUs restored to the system"
+}
+
+status() {
+    if systemctl is-active --quiet cs2-shield.service; then
+        echo "shield: ACTIVE"
+    else
+        echo "shield: inactive"
+    fi
+    local auto_boot auto_now
+    auto_boot=$(systemctl is-enabled cs2-shield-auto.service 2>/dev/null | head -n1); auto_boot=${auto_boot:-n/a}
+    auto_now=$(systemctl is-active   cs2-shield-auto.service 2>/dev/null | head -n1); auto_now=${auto_now:-inactive}
+    printf '  %-14s %s (boot), %s (now)\n' "auto-arm:" "$auto_boot" "$auto_now"
+    printf '  %-14s effective cpus: %s\n' "user.slice"   "$(cat "$CG_ROOT/user.slice/cpuset.cpus.effective"   2>/dev/null || echo '-')"
+    printf '  %-14s effective cpus: %s\n' "system.slice" "$(cat "$CG_ROOT/system.slice/cpuset.cpus.effective" 2>/dev/null || echo '-')"
+    printf '  %-14s effective cpus: %s\n' "cs2 (game)"   "$(cat "$GAME_CG/cpuset.cpus.effective"              2>/dev/null || echo '(not created)')"
+    printf '  %-14s %s\n' "gpu dpm:" "$(cat /sys/class/drm/card*/device/power_dpm_force_performance_level 2>/dev/null | paste -sd' ' -)"
+    local pids; pids=$(pgrep -x cs2 2>/dev/null)
+    if [[ -n "$pids" ]]; then
+        local p
+        for p in $pids; do
+            printf '  cs2 pid %-7s cgroup=%s  affinity=%s\n' \
+                "$p" \
+                "$(grep '^0::' "/proc/$p/cgroup" 2>/dev/null | cut -d: -f3-)" \
+                "$(taskset -cp "$p" 2>/dev/null | sed 's/.*: //')"
+        done
+    else
+        echo "  cs2: not running"
+    fi
+}
+
+case "${1:-}" in
+    on)      need_root on;  systemctl start cs2-shield.service && status ;;
+    off)     need_root off; systemctl stop  cs2-shield.service ;;
+    status)  status ;;
+    auto)
+        case "${2:-}" in
+            on)  need_root "auto on";  systemctl enable --now  cs2-shield-auto.service && echo "auto-arm ON  — launching CS2 will arm the shield automatically" ;;
+            off) need_root "auto off"; systemctl disable --now cs2-shield-auto.service && echo "auto-arm OFF — shield is manual only (cs2-shield on/off)" ;;
+            status|"") status ;;
+            *)   echo "usage: cs2-shield auto {on|off|status}"; exit 1 ;;
+        esac ;;
+    # internal subcommands used by the systemd units:
+    apply)     apply ;;
+    watch)     watch ;;
+    revert)    revert ;;
+    supervise) supervise ;;
+    *) echo "usage: cs2-shield {on|off|status|auto {on|off}}   (run on/off/auto with sudo)"; exit 1 ;;
+esac
