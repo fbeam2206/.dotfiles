@@ -1,0 +1,6 @@
+# Local override of /usr/share/dbus-1/services/org.gnome.Nautilus.service:
+# same Exec, wrapped in env so the D-Bus-activated Nautilus gets GTK_THEME
+# (per-app only; see ~/.local/share/applications/org.gnome.Nautilus.desktop).
+[D-BUS Service]
+Name=org.gnome.Nautilus
+Exec=/usr/bin/env GTK_THEME=WhiteSur-Dark-solid-grey /usr/bin/nautilus --gapplication-service
