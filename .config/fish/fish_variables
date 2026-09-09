@@ -1,7 +1,10 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export VCPKG_ROOT:/home/graham/.local/share/vcpkg/
+SETUVAR --export EDITOR:nvim
 SETUVAR --export LD_LIBRARY_PATH:/usr/local/lib/
 SETUVAR --export STEAM_USE_WAYLAND:1
+SETUVAR --export VISUAL:nvim
 SETUVAR --export XCURSOR_SIZE:36
 SETUVAR --export XCURSOR_THEME:McMojave\x2dCursors
 SETUVAR __done_min_cmd_duration:10000

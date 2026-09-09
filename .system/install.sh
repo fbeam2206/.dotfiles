@@ -27,6 +27,10 @@ install -Dm644 "$HERE/etc/pacman.d/hooks/pkglists.hook" /etc/pacman.d/hooks/pkgl
 echo "   lists refreshed:"
 wc -l "$HERE"/pkglist.txt "$HERE"/aurlist.txt "$HERE"/flatpaklist.txt | sed 's/^/   /'
 
+echo "== ananicy-cpp rule overrides"
+install -Dm644 "$HERE/etc/ananicy.d/99-custom.rules" /etc/ananicy.d/99-custom.rules
+systemctl try-restart ananicy-cpp || true
+
 echo "== cs2-shield (staged in ~/.local/share/cs2-shield)"
 CS2SHIELD="$(dirname "$HERE")/.local/share/cs2-shield/install.sh"
 if [ -f "$CS2SHIELD" ]; then

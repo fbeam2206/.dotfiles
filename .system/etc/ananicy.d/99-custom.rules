@@ -1,0 +1,16 @@
+# Local overrides for CachyOS ananicy-cpp defaults (loaded after 00-default,
+# same-name rules replace earlier ones).
+
+# 00-default/Games/linux-native/linux-native_w.rules classifies any process
+# named "launcher" as BG_CPUIO (nice 16 + SCHED_IDLE + idle io) — meant for
+# War Thunder's updater, but PokeMMO's flatpak entrypoint is /app/bin/launcher
+# and it execs the game in the same process, so the game inherits SCHED_IDLE
+# for life. "Launcher" type keeps the nice/io demotion but sched stays normal.
+{ "name": "launcher", "type": "Launcher" }
+
+# Pin the game itself so nothing inherited from the launch chain sticks.
+{ "name": "PokeMMO", "type": "Game" }
+
+# Default gnome.rules makes nautilus LowLatency_RT (nice -12) — it pegged a
+# core at high priority during bulk ROM copies (Aug 2026 stutter hunt).
+{ "name": "nautilus", "type": "Doc-View" }

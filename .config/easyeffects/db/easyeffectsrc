@@ -1,14 +1,14 @@
+[EffectsPipelines]
+processAllOutputs=false
+
 [StreamInputs]
 inputDevice=alsa_input.usb-Elgato_Systems_Elgato_Wave_XLR_DS32M2A02409-00.mono-fallback
 plugins=rnnoise#0
-visiblePage=pluginsPage
 visiblePlugin=rnnoise#0
 
 [StreamOutputs]
 outputDevice=alsa_output.usb-AudioQuest_AudioQuest_DragonFly_Red_v1.0_AQDFRD0120005697-00.analog-stereo
-
-[Style]
-forceBreezeTheme=false
+visiblePage=pluginsPage
 
 [Window]
 height=700

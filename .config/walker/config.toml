@@ -142,3 +142,10 @@ clipboard = [
   { action = "toggle_images", global = true, label = "toggle images", bind = "ctrl i", after = "ClearReload" },
   { action = "edit", bind = "ctrl o" },
 ]
+
+# offline WordNet dictionary (elephant menu: ~/.config/elephant/menus/dictionary.lua)
+"menus:dictionary" = [
+  { action = "copy_definition", label = "copy definition", default = true, bind = "Return" },
+  { action = "copy_word", label = "copy word", bind = "ctrl c" },
+  { action = "speak", label = "speak", bind = "ctrl s" },
+]
