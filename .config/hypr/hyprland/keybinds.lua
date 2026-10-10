@@ -130,7 +130,7 @@ hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal),    { description = "O
 hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("uwsm stop"), { description = "Logout" })
 hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager), { description = "Open File Manager" })
 hl.bind(mainMod .. " + V",      hl.dsp.window.float({ action = "toggle" }), { description = "Toggle Floating Window State" })
-hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd(menu),        { description = "Open App Launcher" })
+hl.bind(mainMod .. " + D",      hl.dsp.global("quickshell:launcherToggle"), { description = "Open App Launcher" })
 hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen(),   { description = "Fullscreen Active Window" })
 hl.bind(mainMod .. " + CTRL + S",
     hl.dsp.exec_cmd("slurp | grim -g - $(xdg-user-dir PICTURES)/$(date +'screenshot_%Y-%m-%d-%H%M%S.png')"),
@@ -217,4 +217,4 @@ end, { description = "Change Main Display Color" })
 
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("/home/graham/.config/hypr/scripts/scratchWS.py"), { description = "Open Notes" })
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("~/.config/hypr/scripts/shufflewal-dp-5.sh"), { description = "Shuffle Wallpaper" })
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("swaync-client -t -sw"), { description = "Open Notification Center" })
+hl.bind(mainMod .. " + SPACE", hl.dsp.global("quickshell:notificationCenterToggle"), { description = "Open Notification Center" })

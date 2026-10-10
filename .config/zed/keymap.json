@@ -1,0 +1,23 @@
+// Zed keymap — mirrors ~/.config/nvim bindings
+// See https://zed.dev/docs/key-bindings
+[
+  {
+    // Ctrl+H/J/K/L pane switching (smart-splits in nvim)
+    "context": "(Editor && vim_mode == normal) || Dock || (ProjectPanel && not_editing)",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // <leader><CR> → diagnostic float (Zed's hover popover shows diagnostics at cursor)
+      "space enter": "editor::Hover",
+      // K → LSP hover
+      "shift-k": "editor::Hover"
+    }
+  }
+]

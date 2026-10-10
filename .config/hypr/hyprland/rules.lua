@@ -445,15 +445,15 @@ hl.window_rule({
 -- notifications, …). Matching is by namespace — check `hyprctl layers`.
 
 hl.layer_rule({
-    name         = "swaync-cc-blur",
-    match        = { namespace = "swaync-control-center" },
+    name         = "qs-notification-center-blur",
+    match        = { namespace = "quickshell:notificationCenter" },
     blur         = true,
     ignore_alpha = 0.5, -- don't blur pixels more transparent than this
 })
 
 hl.layer_rule({
-    name         = "swaync-notif-blur",
-    match        = { namespace = "swaync-notification-window" },
+    name         = "qs-notification-popups-blur",
+    match        = { namespace = "quickshell:notifications" },
     blur         = true,
     ignore_alpha = 0.5,
 })

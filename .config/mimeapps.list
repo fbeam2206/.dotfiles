@@ -11,6 +11,8 @@ inode/directory=org.gnome.Nautilus.desktop
 x-scheme-handler/nxm=umo.desktop
 x-scheme-handler/momw=umo.desktop
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/curseforge=curseforge.desktop
+application/pdf=org.pwmt.zathura.desktop
 
 [Added Associations]
 text/plain=org.gnome.TextEditor.desktop;

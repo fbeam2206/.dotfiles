@@ -13,8 +13,9 @@
 -------------------------------------------------------------------------------
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("hypridle & swaync")
+    -- hl.exec_cmd("waybar") -- replaced by Quickshell (qs, below)
+    hl.exec_cmd("hypridle")
+    hl.exec_cmd("qs") -- bar, launcher and notifications (~/.config/quickshell)
     hl.exec_cmd("waypaper --restore")
     -- hl.exec_cmd("swaybg -o DP-5 -i /home/graham/Pictures/Wallpapers/slideshow//a_group_of_dark_leaves.jpg & swaybg -o HDMI-A-5 -i /home/graham/Pictures/Wallpapers/slideshow//178385.png")
 
@@ -32,5 +33,5 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wlsunset -l 33.5 -L -86.8 -T 6500 -t 3800")
     hl.exec_cmd("easyeffects --gapplication-service")
     hl.exec_cmd("mullvad-exclude steam -silent -nochatui -nofriendsui")
-    hl.exec_cmd("wayscriber --daemon")
+    hl.exec_cmd("wayscriber --daemon --no-tray")
 end)

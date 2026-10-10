@@ -155,7 +155,7 @@ ShowInstallMenu(){
 
 GoToMenu(){
   case "${1,,}" in
-  *apps*) walker -p "Launch…" ;;
+  *apps*) hyprctl dispatch 'hl.dsp.global("quickshell:launcherToggle")' ;;
   *learn*) ShowLearnMenu ;;
   *power*)  ShowSystemMenu ;;
   *style*) PresentTerminal "$HOME/.config/hypr/scripts/changewallpaper.sh" ;;

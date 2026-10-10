@@ -1,0 +1,19 @@
+# Lan Mouse — software KVM to the Windows laptop (replaces mwb-linux, which
+# can't capture input on Wayland). Traffic is DTLS on UDP 4242; Mullvad needs
+# `mullvad lan set allow` and ufw needs 4242/udp open from the LAN.
+
+port = 4242
+
+# Auto-detect picks the xdph InputCapture portal; upstream only lists
+# layer-shell as supported on Hyprland.
+capture_backend = "layer-shell"
+
+# Fingerprints of devices allowed to control this machine (the laptop's
+# fingerprint is shown in its Lan Mouse window under "General").
+[authorized_fingerprints]
+
+# Windows laptop, physically left of the main monitor (DP-5)
+[[clients]]
+position = "left"
+ips = ["192.168.1.48"]
+activate_on_startup = true

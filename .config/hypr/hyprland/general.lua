@@ -25,7 +25,7 @@ hl.config({
         rounding = 8,
 
         dim_inactive = true,
-        dim_strength = 0.2,
+        dim_strength = 0.15,
 
         -- Windows 11-style shadow: wide, soft, pure black at low opacity and
         -- pushed downward so the bottom edge carries most of the weight.

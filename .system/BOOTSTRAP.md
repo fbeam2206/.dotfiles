@@ -78,6 +78,16 @@ python -m venv ~/.config/hypr/scripts
 - **Mullvad**: log in (`mullvad account login <number>` — account number is
   in KeePassXC). Split-tunnel exclusion is wired via
   `mullvad-exclude steam ...` in Hyprland's `execs.conf` (already tracked).
+  Also `mullvad lan set allow` — Lan Mouse to the Windows laptop needs LAN
+  access through the tunnel.
+- **Lan Mouse** (software KVM, Windows laptop on the left): config + user
+  service are tracked; open the port with
+  `sudo ufw allow from 192.168.1.0/24 to any port 4242 proto udp comment lan-mouse`.
+  The TLS cert (`~/.config/lan-mouse/lan-mouse.pem`) is regenerated on a
+  fresh install, so re-authorize the new fingerprint on the laptop.
+- **Ghostty cursor shader**: `config.ghostty` is tracked, but the shader repo
+  it points at is a third-party clone —
+  `git clone https://github.com/sahaj-b/ghostty-cursor-shaders ~/.config/ghostty/ghostty-cursor-shaders`
 - **Steam**: log in; games re-download. CS2 launch options (per-machine, not
   cloud-synced):
   `~/.config/hypr/scripts/game-mode.sh %command% -high -nojoy -refresh 360`

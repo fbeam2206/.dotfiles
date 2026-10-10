@@ -1,0 +1,30 @@
+#theme  = Adventure
+#theme  = Black Metal (Bathory)
+#theme  = Aizen Dark
+#theme  = Kanso Ink
+#theme  = Apple System Colors
+#theme  = Ayu
+#theme  = Broadcast
+#theme = Chalkboard
+#theme = Ciapre
+theme = Dark Modern
+
+background-opacity = 0.87
+
+cursor-style = underline
+
+window-padding-y = 4
+window-padding-x = 8
+
+font-family = Lilex Nerd Font
+font-style = Medium
+font-size = 14
+
+#custom-shader = ~/.config/ghostty/ghostty-shader-playground/public/shaders/cursor_smear.glsl
+#custom-shader = ~/.config/ghostty/ghostty-shader-playground/public/shaders/cursor_smear_original.glsl
+#custom-shader = ~/.config/ghostty/ghostty-shader-playground/public/shaders/cursor_smear_fade.glsl
+#custom-shader = ~/.config/ghostty/ghostty-shader-playground/public/shaders/cursor_smear_fade_original.glsl
+#custom-shader = ~/.config/ghostty/ghostty-shader-playground/public/shaders/cursor_synesthaxia(tweened).glsl
+#custom-shader = ~/.config/ghostty/ghostty-cursor-shaders/cursor_warp.glsl
+custom-shader = ~/.config/ghostty/ghostty-cursor-shaders/cursor_tail.glsl
+custom-shader-animation = always
